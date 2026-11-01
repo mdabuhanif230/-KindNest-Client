@@ -21,6 +21,7 @@ export default function Navbar() {
               <img src={user.image || `https://api.dicebear.com/9.x/initials/svg?seed=${user.name}`} alt={user.name} className="w-10 h-10 rounded-full object-cover" />
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-base-200 rounded-box w-52 p-2 shadow z-40">
+              <li><Link href="/profile">My Profile</Link></li>
               <li><Link href="/create">Create Event</Link></li>
               <li><Link href="/manage">Manage Events</Link></li>
               <li><Link href="/joined">Joined Events</Link></li>

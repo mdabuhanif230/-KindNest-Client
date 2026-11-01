@@ -34,6 +34,7 @@ Plain JavaScript only: `jsconfig.json` (no tsconfig), `@/*` alias → `./src/*`.
 ## Gotchas
 
 - After moving/renaming `app` or `src` dirs: kill the dev server, delete `.next`, restart. Stale chunks surface as `Cannot find module './887.js'` runtime errors.
+- **Never run `npm run build` while `npm run dev` is running** — both use `.next`, so the build corrupts the dev server and every route returns 500. Kill dev first, build, then restart dev (and delete `.next` if routes stay broken).
 - `src/app/events/page.js` uses `useSearchParams()`; it must stay wrapped in `<Suspense>` or `next build` fails (`missing-suspense-with-csr-bailout`).
 - `next build` evaluates BetterAuth at build time (MongoClient is constructed at import), so build needs `MONGODB_URI`/`JWT_SECRET` set — a dummy `mongodb://127.0.0.1:27017/kindnest` is enough.
 - Event validation is duplicated by design: client `src/components/EventForm.js` and server `clean()` in `../server/index.js`. Change both together.

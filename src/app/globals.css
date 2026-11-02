@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@plugin "daisyui" { themes: false; }
+@plugin "daisyui/theme" { name:"light"; default:true; color-scheme:light;
+  --color-base-100:#fbfdfc; --color-base-200:#eef4f2; --color-base-300:#d9e5e1; --color-base-content:#12302b;
+  --color-primary:#0f766e; --color-primary-content:#fff; --color-secondary:#f0a81c; --color-secondary-content:#2a1d00;
+  --color-accent:#d6453d; --color-neutral:#12302b; --color-neutral-content:#fbfdfc;
+  --color-info:#2f7fb8; --color-success:#2e9e5b; --color-warning:#f0a81c; --color-error:#d6453d; --radius-box:.75rem; --radius-field:.5rem; }
+@plugin "daisyui/theme" { name:"dark"; color-scheme:dark;
+  --color-base-100:#0d1a18; --color-base-200:#13251f; --color-base-300:#1e3530; --color-base-content:#e2efec;
+  --color-primary:#2cb5a8; --color-primary-content:#04201c; --color-secondary:#f0a81c; --color-secondary-content:#2a1d00;
+  --color-accent:#ef6b62; --color-neutral:#e2efec; --color-neutral-content:#0d1a18;
+  --color-info:#5aa9db; --color-success:#4cc37e; --color-warning:#f0a81c; --color-error:#ef6b62; --radius-box:.75rem; --radius-field:.5rem; }
+body{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+.sec-title{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.5rem}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

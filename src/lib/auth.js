@@ -5,5 +5,5 @@ const client = new MongoClient(process.env.MONGODB_URI);
 export const auth = betterAuth({
   database: mongodbAdapter(client.db("kindnest")),
   emailAndPassword: { enabled: true },
-  socialProviders: { github: { clientId: process.env.GITHUB_CLIENT_ID || "x", clientSecret: process.env.GITHUB_CLIENT_SECRET || "x" } },
+  socialProviders: { google: { clientId: process.env.GOOGLE_CLIENT_ID || "x", clientSecret: process.env.GOOGLE_CLIENT_SECRET || "x" } },
 });

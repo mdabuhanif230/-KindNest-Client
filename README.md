@@ -7,7 +7,7 @@ Live site: https://your-client-url.vercel.app  |  API: https://your-server-url.v
 - Upcoming-only listing: events whose date has passed are hidden automatically
 - One-click Join Event with duplicate protection, plus a Joined Events page sorted by date
 - Search & filter events by title and event type
-- Email/password and GitHub login (BetterAuth + MongoDB) with JWT-protected API routes
+- Email/password and Google login (BetterAuth + MongoDB) with JWT-protected API routes
 - Light/dark theme toggle, loading skeletons, toast feedback and full form validation
 
 ## Project structure
@@ -30,7 +30,7 @@ kindnest/
 1. `cd server && cp .env.example .env && npm i && npm run dev`
 2. `cd client && cp .env.example .env.local && npm i && npm run dev`
 3. Use the same `JWT_SECRET` in both. (A `.env.local` with generated secrets already exists — just fill in `MONGODB_URI`.)
-4. Optional: set `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` in `client/.env.local` to enable GitHub login.
+4. Optional: set `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` in `client/.env.local` to enable Google login.
 
 ## Scripts
 | Where   | Command        | What it does            |

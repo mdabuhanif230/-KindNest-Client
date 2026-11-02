@@ -23,7 +23,7 @@ export default function Login() {
         <input type="password" className="input w-full" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button className="btn btn-primary" disabled={busy}>{busy ? <span className="loading loading-spinner" /> : "Log in"}</button>
       </form>
-      <button className="btn btn-outline w-full mt-3" onClick={() => authClient.signIn.social({ provider: "github", callbackURL: "/" })}>Continue with GitHub</button>
+      <button className="btn btn-outline w-full mt-3" onClick={() => authClient.signIn.social({ provider: "google", callbackURL: "/" })}>Continue with Google</button>
       <p className="mt-4 text-sm">New here? <Link href="/register" className="link link-primary">Create an account</Link></p>
     </div>
   );

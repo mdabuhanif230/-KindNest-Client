@@ -27,7 +27,7 @@ Plain JavaScript only: `jsconfig.json` (no tsconfig), `@/*` alias → `./src/*`.
 
 ## Env files
 
-- Client: `.env.local` (auto-loaded by Next). `NEXT_PUBLIC_API_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `MONGODB_URI`, `JWT_SECRET`, `GITHUB_CLIENT_ID`/`GITHUB_CLIENT_SECRET` (GitHub login optional; email/password works without them).
+- Client: `.env.local` (auto-loaded by Next). `NEXT_PUBLIC_API_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `MONGODB_URI`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` (Google login optional; email/password works without them).
 - Server: `dotenv.config()` loads `.env` only — **not** `.env.local`. Needs `PORT`, `MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL` (comma-separated CORS allowlist).
 - Both sides hardcode db name `kindnest`: BetterAuth collections come from the adapter; the server owns `events` and `joins`.
 

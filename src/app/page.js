@@ -1,10 +1,10 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import EventGrid from "@/components/EventGrid";
+import Btn from "@/components/Btn";
 
 const features = [
   ["👕", "Create a drive in minutes", "Post a clothes, blanket or food drive with a place and a date."],
@@ -27,22 +27,33 @@ const gallery = [
 
 export default function Home() {
   const [events, setEvents] = useState(null);
+  const [nl, setNl] = useState("");
   useEffect(() => { api("/events?limit=6").then(setEvents).catch((e) => { toast.error(e.message); setEvents([]); }); }, []);
+  // Newsletter is decorative by spec — this only gives the button some feedback
+  const subscribe = (e) => {
+    e.preventDefault();
+    if (!/^\S+@\S+\.\S+$/.test(nl)) return toast.error("Enter a valid email address.");
+    setNl("");
+    toast.success("Thanks for subscribing! 📬");
+  };
   return (
     <>
-      {/* Banner */}
-      <section className="bg-primary text-primary-content">
-        <div className="max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-10 items-center">
+      {/* Banner — bulletin board with a taped-up polaroid */}
+      <section className="dots border-b-2 border-dashed border-base-content/20">
+        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="badge badge-secondary badge-lg mb-4">Neighbours helping neighbours</span>
-            <h1 className="text-4xl md:text-6xl leading-tight">Winter is coming. Who is helping your street?</h1>
-            <p className="mt-4 text-lg opacity-90">Find blanket drives, clothes distributions and cleanups in your neighbourhood, or start your own.</p>
-            <div className="mt-6 flex gap-3">
-              <Link href="/events" className="btn btn-secondary">Find an event</Link>
-              <Link href="/create" className="btn btn-outline text-primary-content">Start a drive</Link>
+            <span className="sticker rounded-full px-4 py-1.5 text-sm uppercase tracking-wide -rotate-3">Neighbours helping neighbours</span>
+            <h1 className="text-4xl md:text-6xl leading-tight mt-6">Winter is coming. <span className="hl">Who is helping your street?</span></h1>
+            <p className="mt-4 text-lg opacity-80">Find blanket drives, clothes distributions and cleanups in your neighbourhood, or start your own.</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Btn href="/events" variant="secondary">Find an event</Btn>
+              <Btn href="/create" variant="dark">Start a drive</Btn>
             </div>
           </div>
-          <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=900&h=600&fit=crop" alt="Volunteers handing out supplies" className="rounded-box w-full h-72 md:h-96 object-cover shadow-lg" />
+          <figure className="tape tilt-r bg-white p-3 pb-8 mx-auto w-full max-w-md shadow-[6px_6px_0_rgba(0,0,0,.18)]">
+            <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=900&h=600&fit=crop" alt="Volunteers handing out supplies" className="w-full h-64 md:h-80 object-cover" />
+            <figcaption className="hand text-lg text-center mt-2 text-[#332a1f]">everyone’s welcome 💛</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -50,9 +61,9 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 pt-16">
         <h2 className="sec-title">What you can do here</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-6">
-          {features.map(([icon, t, d]) => (
-            <div key={t} className="p-5 rounded-box bg-base-200 border border-base-300 h-full transition-transform hover:-translate-y-1">
-              <span className="text-3xl">{icon}</span>
+          {features.map(([icon, t, d], i) => (
+            <div key={t} className={`paper p-5 h-full tilt-hover ${i % 2 ? "tilt-r" : "tilt-l"}`}>
+              <span className="sticker rounded-full w-12 h-12 text-2xl">{icon}</span>
               <h3 className="font-bold text-lg mt-3">{t}</h3>
               <p className="mt-2 text-sm opacity-80">{d}</p>
             </div>
@@ -64,33 +75,35 @@ export default function Home() {
       <section className="max-w-6xl mx-auto px-4 pt-16">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <h2 className="sec-title">Happening soon</h2>
-          <Link href="/events" className="btn btn-ghost btn-sm">View all →</Link>
+          <Btn href="/events" size="sm" variant="dark">View all →</Btn>
         </div>
         <div className="mt-6"><EventGrid list={events} render={(ev) => <EventCard key={ev._id} ev={ev} />} /></div>
       </section>
 
-      {/* Gallery */}
+      {/* Gallery — taped-up polaroids */}
       <section className="max-w-6xl mx-auto px-4 pt-16">
         <h2 className="sec-title">Moments from past drives</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-          {gallery.map(([src, cap]) => (
-            <figure key={cap} className="relative rounded-box overflow-hidden group h-40">
-              <img src={src} alt={cap} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-black/50 text-white text-xs p-2 opacity-0 group-hover:opacity-100 transition-opacity">{cap}</figcaption>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-6">
+          {gallery.map(([src, cap], i) => (
+            <figure key={cap} className={`bg-white p-2 pb-6 shadow-[4px_4px_0_rgba(0,0,0,.15)] tilt-hover group ${i % 2 ? "tilt-r" : "tilt-l"}`}>
+              <div className="overflow-hidden">
+                <img src={src} alt={cap} className="w-full h-32 md:h-36 object-cover transition-transform duration-300 group-hover:scale-105" />
+              </div>
+              <figcaption className="hand text-lg text-center mt-1.5 text-[#332a1f]">{cap}</figcaption>
             </figure>
           ))}
         </div>
       </section>
 
-      {/* Newsletter */}
+      {/* Newsletter — a note pinned to the board */}
       <section className="max-w-3xl mx-auto px-4 pt-16 text-center">
-        <div className="p-8 rounded-box bg-secondary text-secondary-content">
+        <div className="paper tape p-8">
           <h2 className="sec-title">Get new drives in your inbox</h2>
-          <p>One short email a week. No spam.</p>
-          <div className="join mt-4 w-full max-w-md">
-            <input className="input join-item w-full" placeholder="you@example.com" />
-            <button className="btn join-item btn-neutral">Subscribe</button>
-          </div>
+          <p className="hand text-lg">One short email a week. No spam, promise.</p>
+          <form onSubmit={subscribe} className="join mt-4 w-full max-w-md">
+            <input className="input join-item w-full" placeholder="you@example.com" value={nl} onChange={(e) => setNl(e.target.value)} />
+            <Btn type="submit" size="sm" variant="neutral" className="join-item">Subscribe</Btn>
+          </form>
         </div>
       </section>
     </>

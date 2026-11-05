@@ -1,16 +1,213 @@
 @import "tailwindcss";
 @plugin "daisyui" { themes: false; }
 @plugin "daisyui/theme" { name:"light"; default:true; color-scheme:light;
-  --color-base-100:#fbfdfc; --color-base-200:#eef4f2; --color-base-300:#d9e5e1; --color-base-content:#12302b;
+  --color-base-100:#faf6ee; --color-base-200:#f2e9d8; --color-base-300:#e5d7bd; --color-base-content:#332a1f;
   --color-primary:#0f766e; --color-primary-content:#fff; --color-secondary:#f0a81c; --color-secondary-content:#2a1d00;
-  --color-accent:#d6453d; --color-neutral:#12302b; --color-neutral-content:#fbfdfc;
-  --color-info:#2f7fb8; --color-success:#2e9e5b; --color-warning:#f0a81c; --color-error:#d6453d; --radius-box:.75rem; --radius-field:.5rem; }
+  --color-accent:#d6584a; --color-neutral:#2c2418; --color-neutral-content:#f7f1e6;
+  --color-info:#3a7ca5; --color-success:#3f9260; --color-warning:#f0a81c; --color-error:#d6584a;
+  --radius-box:.6rem; --radius-field:.55rem; }
 @plugin "daisyui/theme" { name:"dark"; color-scheme:dark;
-  --color-base-100:#0d1a18; --color-base-200:#13251f; --color-base-300:#1e3530; --color-base-content:#e2efec;
-  --color-primary:#2cb5a8; --color-primary-content:#04201c; --color-secondary:#f0a81c; --color-secondary-content:#2a1d00;
-  --color-accent:#ef6b62; --color-neutral:#e2efec; --color-neutral-content:#0d1a18;
-  --color-info:#5aa9db; --color-success:#4cc37e; --color-warning:#f0a81c; --color-error:#ef6b62; --radius-box:.75rem; --radius-field:.5rem; }
-body{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+  --color-base-100:#211a13; --color-base-200:#2b231a; --color-base-300:#3b3125; --color-base-content:#f3ead9;
+  --color-primary:#45c3b4; --color-primary-content:#062521; --color-secondary:#f0a81c; --color-secondary-content:#2a1d00;
+  --color-accent:#ef7d6b; --color-neutral:#f3ead9; --color-neutral-content:#211a13;
+  --color-info:#6fb3dd; --color-success:#63c48b; --color-warning:#f0a81c; --color-error:#ef7d6b;
+  --radius-box:.6rem; --radius-field:.55rem; }
+
+/* Desk (page background) and input field colour — declared in plain CSS so both
+   themes are guaranteed to define them. The desk is always one step beyond the
+   paper: sheets sit lighter than the surface they lie on. */
+:root{--color-desk:#f2e9d8;--color-paper-field:#fffdf7}
+[data-theme="dark"]{--color-desk:#17120d;--color-paper-field:#2b231a}
+
+/* ── base: warm paper page ─────────────────────────────────────────────── */
+body{
+  font-family:"Bricolage Grotesque",system-ui,sans-serif;
+  background-color:var(--color-desk);
+  /* faint paper grain over the desk */
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}
 h1,h2,h3{font-weight:800;letter-spacing:-.02em}
-.sec-title{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:.5rem}
+.sec-title{font-size:clamp(1.75rem,3vw,2.5rem);font-weight:800;margin-bottom:1.25rem;position:relative;display:inline-block}
+/* hand-drawn amber squiggle under every section title */
+.sec-title::after{
+  content:"";position:absolute;left:0;right:0;bottom:-.4rem;height:.55rem;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M3 8 C 25 2, 45 11, 65 6 S 100 3, 117 7' fill='none' stroke='%23f0a81c' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── craft toolkit ────────────────────────────────────────────────────── */
+/* sheet of paper: warm border + hard offset shadow (stacked-paper look) */
+.paper{
+  background:var(--color-base-100);
+  border:2px solid color-mix(in srgb,var(--color-base-content) 18%,transparent);
+  border-radius:var(--radius-box);
+  box-shadow:4px 4px 0 color-mix(in srgb,var(--color-base-content) 10%,transparent);
+}
+/* die-cut white sticker — add rounded-* + text utilities in JSX as needed */
+.sticker{
+  background:#fffdf7;color:#332a1f;
+  border:3px solid #fffdf7;
+  box-shadow:3px 3px 0 rgba(28,22,14,.22);
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+}
+/* washi tape strip across the top of a card */
+.tape{position:relative}
+.tape::before{
+  content:"";position:absolute;top:-13px;left:50%;width:112px;height:26px;z-index:2;pointer-events:none;
+  transform:translateX(-50%) rotate(-4deg);border-radius:2px;
+  background-color:color-mix(in srgb,var(--color-secondary) 62%,transparent);
+  background-image:repeating-linear-gradient(90deg,transparent 0 7px,rgba(255,255,255,.35) 7px 8px);
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+/* scrapbook tilts — hover straightens and lifts */
+.tilt-l{transform:rotate(-1.6deg)}
+.tilt-r{transform:rotate(1.6deg)}
+.tilt-hover{transition:transform .25s ease}
+.tilt-hover:hover{transform:rotate(0) translateY(-4px)}
+/* highlighter swipe over a phrase */
+.hl{background:linear-gradient(transparent 55%,color-mix(in srgb,var(--color-secondary) 60%,transparent) 55%);padding:0 .08em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+/* handwriting accent — pair with a text-size utility */
+.hand{font-family:"Caveat",cursive;font-weight:700}
+/* pinboard dot pattern */
+.dots{background-image:radial-gradient(color-mix(in srgb,var(--color-base-content) 14%,transparent) 1.3px,transparent 1.4px);background-size:24px 24px}
+/* postage-stamp perforation along the footer's top edge */
+.stamp{position:relative}
+.stamp::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:14px;pointer-events:none;
+  background-image:radial-gradient(circle at 50% 0,var(--color-desk) 0 7px,transparent 7.5px);
+  background-size:22px 14px;background-repeat:repeat-x;
+}
+
+/* ── daisyUI restyles (unlayered: they win over the plugin's layers) ─── */
+.input,.select,.textarea{
+  background-color:var(--color-paper-field);
+  border:2px solid color-mix(in srgb,var(--color-base-content) 22%,transparent);
+  font-weight:500;
+}
+.input:focus,.select:focus,.textarea:focus{
+  border-color:var(--color-primary);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--color-primary) 28%,transparent);
+  outline:none;
+}
+.badge{
+  border:2px solid color-mix(in srgb,var(--color-base-content) 28%,transparent);
+  font-weight:800;text-transform:uppercase;letter-spacing:.04em;
+}
+/* keep loading skeletons visible against the desk */
+.skeleton{background-color:var(--color-base-300)}
+.modal-box{
+  background:var(--color-base-100);
+  border:2px solid color-mix(in srgb,var(--color-base-content) 20%,transparent);
+  border-radius:var(--radius-box);
+  box-shadow:6px 6px 0 rgba(0,0,0,.25);
+}
+
+/* ── btn-53: https://uiverse.io/doniaskima/happy-turtle-32 ────────────────
+   Resting state = the white "original" face; on hover it slides down and the
+   letters fly in one by one over a black layer. Used by <Btn />.
+   Hard offset shadows give every button the sticker/die-cut feel. */
+@layer components {
+  .btn-53 {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    margin: 0;
+    background-color: #2a2118;
+    background-image: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 100%;
+    line-height: 1.5;
+    border: 2px solid #2a2118;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 900;
+    overflow: hidden;
+    padding: 1.2rem 3rem;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0 var(--color-base-content);
+  }
+  /* Disabled = dashed "not available" outline instead of a faded blob —
+     readable in every variant and theme (0,2,0 beats the variant rules). */
+  .btn-53:disabled {
+    cursor: default;
+    pointer-events: none;
+    background: transparent;
+    border: 2px dashed color-mix(in srgb, var(--color-base-content) 35%, transparent);
+    color: color-mix(in srgb, var(--color-base-content) 45%, transparent);
+    box-shadow: none;
+  }
+  .btn-53:disabled .original {
+    background: transparent;
+    color: color-mix(in srgb, var(--color-base-content) 45%, transparent);
+  }
+  /* …except success-disabled is a status ("joined"), not a pending action:
+     keep it green, just flat and unclickable. */
+  .btn-53-success:disabled {
+    background: color-mix(in srgb, var(--color-success) 15%, transparent);
+    border: 2px solid var(--color-success);
+    color: var(--color-success);
+    box-shadow: none;
+  }
+  .btn-53-success:disabled .original {
+    background: transparent;
+    color: var(--color-success);
+  }
+  .btn-53:focus-visible { outline: 3px solid var(--color-secondary); outline-offset: 2px; }
+
+  .btn-53 .original {
+    background: #fffdf7;
+    color: #332a1f;
+    display: flex;
+    align-items: center;
+    justify-content: inherit;
+    inset: 0;
+    position: absolute;
+    transition: transform 0.2s cubic-bezier(0.87, 0, 0.13, 1);
+  }
+  .btn-53:hover .original { transform: translateY(100%); }
+
+  .btn-53 .letters { display: inline-flex; }
+  .btn-53 .letters span {
+    opacity: 0;
+    transform: translateY(-15px);
+    transition: transform 0.2s cubic-bezier(0.87, 0, 0.13, 1), opacity 0.2s;
+  }
+  .btn-53 .letters span:nth-child(2n) { transform: translateY(15px); }
+  .btn-53:hover .letters span { opacity: 1; transform: translateY(0); }
+  .btn-53:hover .letters span:nth-child(2) { transition-delay: 0.1s; }
+  .btn-53:hover .letters span:nth-child(3) { transition-delay: 0.2s; }
+  .btn-53:hover .letters span:nth-child(4) { transition-delay: 0.3s; }
+  .btn-53:hover .letters span:nth-child(5) { transition-delay: 0.4s; }
+  .btn-53:hover .letters span:nth-child(6) { transition-delay: 0.5s; }
+  .btn-53:hover .letters span:nth-child(n + 7) { transition-delay: 0.6s; }
+
+  /* colour variants: they recolour the resting face only — the revealed
+     layer stays black with white letters (the dark variant flips to white). */
+  .btn-53-dark { background-color: #fff; color: #000; border-color: var(--color-base-content); box-shadow: 3px 3px 0 var(--color-base-content); }
+  .btn-53-dark .original { background: var(--color-neutral); color: var(--color-neutral-content); }
+  .btn-53-error { border-color: var(--color-error); box-shadow: 3px 3px 0 var(--color-error); }
+  .btn-53-error .original { background: var(--color-error); color: var(--color-error-content, #fff); }
+  .btn-53-success { border-color: var(--color-success); box-shadow: 3px 3px 0 var(--color-success); }
+  .btn-53-success .original { background: var(--color-success); color: var(--color-success-content, #fff); }
+  .btn-53-secondary { border-color: var(--color-secondary); box-shadow: 3px 3px 0 var(--color-secondary); }
+  .btn-53-secondary .original { background: var(--color-secondary); color: var(--color-secondary-content, #000); }
+  .btn-53-neutral { border-color: var(--color-neutral); box-shadow: 3px 3px 0 var(--color-neutral); }
+  .btn-53-neutral .original { background: var(--color-neutral); color: var(--color-neutral-content, #fff); }
+
+  /* sizes */
+  .btn-53-sm { padding: 0.7rem 1.5rem; font-size: 0.875rem; }
+  .btn-53-xs { padding: 0.35rem 0.9rem; font-size: 0.75rem; }
+  .btn-53-circle {
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    display: grid;
+    place-content: center;
+  }
+}

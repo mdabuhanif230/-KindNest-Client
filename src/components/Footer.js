@@ -1,10 +1,10 @@
 import Link from "next/link";
 export default function Footer() {
   return (
-    <footer className="bg-neutral text-neutral-content mt-20">
+    <footer className="bg-neutral text-neutral-content mt-20 stamp">
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-8 md:grid-cols-3">
         <div><p className="text-2xl font-extrabold text-secondary">KindNest</p>
-          <p className="mt-2 text-sm opacity-80">Neighbours helping neighbours. Find a drive near you, show up, and make a difference.</p></div>
+          <p className="mt-2 hand text-lg opacity-90">Neighbours helping neighbours. Find a drive near you, show up, and make a difference.</p></div>
         <div className="grid gap-1 text-sm"><p className="font-bold">Explore</p>
           <Link href="/events">Upcoming Events</Link><Link href="/create">Create Event</Link><Link href="/joined">Joined Events</Link></div>
         <div className="text-sm"><p className="font-bold">Contact</p><p>help@kindnest.example</p><p>Mirpur 10, Dhaka</p>

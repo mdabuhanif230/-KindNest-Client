@@ -16,6 +16,23 @@ export function initialAvatar(name) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
+export function avatarImageUrl(url) {
+  if (!/^https?:\/\//i.test(url || "")) return url;
+
+  try {
+    const parsed = new URL(url);
+    if (
+      /(^|\.)googleusercontent\.com$/i.test(parsed.hostname) &&
+      !/=s\d+(?:-[a-z]+)?$/i.test(parsed.pathname)
+    ) {
+      parsed.pathname += "=s256-c";
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 // <img> onError handler for avatars: retry the original photo URL once with a
 // cache-busting param (a single transient network blip must not stick the
 // fallback forever), then fall back to the local initial avatar.

@@ -6,7 +6,7 @@ import { authClient } from "@/lib/auth-client";
 import { api } from "@/lib/api";
 import Guard from "@/components/Guard";
 import Btn from "@/components/Btn";
-import { initialAvatar, onAvatarError, fileToAvatar } from "@/lib/avatar";
+import { avatarImageUrl, initialAvatar, onAvatarError, fileToAvatar } from "@/lib/avatar";
 
 const initials = (n) => initialAvatar(n);
 const today = () => new Date().toISOString().slice(0, 10);
@@ -101,7 +101,7 @@ export default function Profile() {
   };
 
   const dirty = ready && (name.trim() !== (user?.name || "") || image.trim() !== (user?.image || "") || !!pending);
-  const avatar = pending || image.trim() || user?.image || initials(user?.name);
+  const avatar = avatarImageUrl(pending || image.trim() || user?.image || initials(user?.name));
   const num = (v) => (Array.isArray(v) ? v.length : v === null ? "—" : undefined);
   const upcoming = Array.isArray(stats?.mine) ? stats.mine.filter((ev) => ev.date >= today()).length : stats ? "—" : undefined;
   const onImgError = (e) => onAvatarError(e, avatar, user?.name);
@@ -119,6 +119,7 @@ export default function Profile() {
               <img
                 src={avatar}
                 onError={onImgError}
+                referrerPolicy="no-referrer"
                 alt={user?.name || "profile"}
                 className="w-24 h-24 rounded-full object-cover bg-base-200 border-[5px] border-white shadow-[4px_4px_0_rgba(0,0,0,.2)] -rotate-3 transition-transform duration-200 hover:rotate-0"
               />
@@ -156,7 +157,7 @@ export default function Profile() {
             <div className="grid gap-1.5">
               <span className="text-sm font-semibold opacity-80">Profile photo</span>
               <div className="flex items-center gap-3 flex-wrap">
-                <img src={avatar} onError={onImgError} alt="preview" className="w-12 h-12 rounded-full object-cover bg-base-200 shrink-0 border-[3px] border-white shadow-[2px_2px_0_rgba(0,0,0,.18)] -rotate-2" />
+                <img src={avatar} onError={onImgError} referrerPolicy="no-referrer" alt="preview" className="w-12 h-12 rounded-full object-cover bg-base-200 shrink-0 border-[3px] border-white shadow-[2px_2px_0_rgba(0,0,0,.18)] -rotate-2" />
                 <div className="flex gap-2 flex-wrap">
                   <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPick} />
                   <Btn type="button" size="sm" variant="dark" onClick={() => fileRef.current?.click()} disabled={imgBusy}>

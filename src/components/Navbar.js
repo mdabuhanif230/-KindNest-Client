@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import Btn from "@/components/Btn";
-import { initialAvatar, onAvatarError } from "@/lib/avatar";
+import { avatarImageUrl, initialAvatar, onAvatarError } from "@/lib/avatar";
 
 export default function Navbar() {
   const { data } = authClient.useSession();
@@ -60,8 +60,9 @@ export default function Navbar() {
                 <div className="avatar online">
                   <div className="w-10 rounded-full overflow-hidden border-[3px] border-white shadow-[2px_3px_0_rgba(0,0,0,.25)] -rotate-3 transition-transform duration-200 hover:rotate-0">
                     <img
-                      src={user.image || initialAvatar(user.name)}
-                      onError={(e) => onAvatarError(e, user.image, user.name)}
+                      src={avatarImageUrl(user.image) || initialAvatar(user.name)}
+                      onError={(e) => onAvatarError(e, avatarImageUrl(user.image), user.name)}
+                      referrerPolicy="no-referrer"
                       alt={user.name}
                       className="w-full h-full object-cover"
                     />

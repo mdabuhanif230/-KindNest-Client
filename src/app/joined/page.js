@@ -21,16 +21,7 @@ export default function Joined() {
   };
 
   useEffect(() => {
-    let active = true;
-    api("/joined", { auth: true })
-      .then((events) => { if (active) setList(events); })
-      .catch((e) => {
-        if (active) {
-          setError(e.message);
-          toast.error(e.message);
-        }
-      });
-    return () => { active = false; };
+    load();
   }, []);
 
   return <Guard><div className="max-w-6xl mx-auto px-4 py-10"><h1 className="sec-title">Events you joined</h1>

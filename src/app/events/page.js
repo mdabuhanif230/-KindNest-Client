@@ -24,19 +24,34 @@ function EventsInner() {
   const [type, setType] = useState(params.get("type") || "");
   const [search, setSearch] = useState(params.get("search") || "");
 
-  const load = () => {
+  const load = (nextType, nextSearch) => {
     setEvents(null);
     const q = new URLSearchParams();
-    if (type) q.set("type", type);
-    if (search.trim()) q.set("search", search.trim());
+    if (nextType) q.set("type", nextType);
+    if (nextSearch.trim()) q.set("search", nextSearch.trim());
     api(`/events${q.size ? `?${q}` : ""}`)
       .then(setEvents)
       .catch((e) => { toast.error(e.message); setEvents([]); });
   };
 
-  useEffect(() => { load(); }, [type]); // eslint-disable-line react-hooks/exhaustive-deps
+  const query = params.toString();
+  useEffect(() => {
+    const nextType = params.get("type") || "";
+    const nextSearch = params.get("search") || "";
+    setType(nextType);
+    setSearch(nextSearch);
+    load(nextType, nextSearch);
+  }, [query]);
 
-  const submit = (e) => { e.preventDefault(); load(); router.push(`/events?type=${encodeURIComponent(type)}&search=${encodeURIComponent(search.trim())}`, { scroll: false }); };
+  const submit = (e) => {
+    e.preventDefault();
+    const next = new URLSearchParams();
+    if (type) next.set("type", type);
+    if (search.trim()) next.set("search", search.trim());
+    const nextQuery = next.toString();
+    if (nextQuery === query) load(type, search);
+    else router.push(`/events${nextQuery ? `?${nextQuery}` : ""}`, { scroll: false });
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">

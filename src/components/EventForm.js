@@ -19,12 +19,30 @@ export default function EventForm({ initial, onSubmit, label }) {
   };
   return (
     <form onSubmit={submit} className="grid gap-3">
-      <input className="input w-full" placeholder="Event title" value={f.title} onChange={set("title")} />
-      <textarea className="textarea w-full h-28" placeholder="What will volunteers do, and what should they bring?" value={f.description} onChange={set("description")} />
-      <select className="select w-full" value={f.type} onChange={set("type")}>{TYPES.map((t) => <option key={t}>{t}</option>)}</select>
-      <input className="input w-full" placeholder="Thumbnail image URL" value={f.thumbnail} onChange={set("thumbnail")} />
-      <input className="input w-full" placeholder="Location, e.g. Mirpur 10, Dhaka" value={f.location} onChange={set("location")} />
-      <input type="date" min={tomorrow} className="input w-full" value={f.date} onChange={set("date")} />
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Event title</span>
+        <input required minLength={5} className="input w-full" placeholder="Event title" value={f.title} onChange={set("title")} />
+      </label>
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Description</span>
+        <textarea required minLength={20} className="textarea w-full h-28" placeholder="What will volunteers do, and what should they bring?" value={f.description} onChange={set("description")} />
+      </label>
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Event type</span>
+        <select required className="select w-full" value={f.type} onChange={set("type")}>{TYPES.map((t) => <option key={t}>{t}</option>)}</select>
+      </label>
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Thumbnail image URL</span>
+        <input required type="url" className="input w-full" placeholder="https://example.com/image.jpg" value={f.thumbnail} onChange={set("thumbnail")} />
+      </label>
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Location</span>
+        <input required className="input w-full" placeholder="e.g. Mirpur 10, Dhaka" value={f.location} onChange={set("location")} />
+      </label>
+      <label className="grid gap-1">
+        <span className="text-sm font-semibold">Event date</span>
+        <input required type="date" min={tomorrow} className="input w-full" value={f.date} onChange={set("date")} />
+      </label>
       <Btn disabled={busy}>{busy ? <span className="loading loading-spinner" /> : label}</Btn>
     </form>
   );

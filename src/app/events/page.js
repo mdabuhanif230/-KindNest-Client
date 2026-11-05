@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { api } from "@/lib/api";
 import EventCard from "@/components/EventCard";
 import EventGrid from "@/components/EventGrid";
+import Btn from "@/components/Btn";
 
 const TYPES = ["Cleanup", "Plantation", "Donation", "Food Drive", "Blood Donation", "Education"];
 
@@ -40,13 +41,13 @@ function EventsInner() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
       <h1 className="sec-title">Upcoming events</h1>
-      <form onSubmit={submit} className="flex flex-wrap gap-3 mt-4">
+      <form onSubmit={submit} className="paper tape p-4 mt-4 flex flex-wrap gap-3 items-center">
         <input className="input w-full sm:w-72" placeholder="Search by title…" value={search} onChange={(e) => setSearch(e.target.value)} />
         <select className="select w-full sm:w-56" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All types</option>
           {TYPES.map((t) => <option key={t}>{t}</option>)}
         </select>
-        <button className="btn btn-primary">Search</button>
+        <Btn size="sm">Search</Btn>
       </form>
       <div className="mt-8">
         <EventGrid list={events} render={(ev) => <EventCard key={ev._id} ev={ev} />} />

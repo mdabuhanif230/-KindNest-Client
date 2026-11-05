@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import Btn from "@/components/Btn";
 export const TYPES = ["Cleanup", "Plantation", "Donation", "Food Drive", "Blood Donation", "Education"];
 export default function EventForm({ initial, onSubmit, label }) {
   const [f, setF] = useState(initial || { title: "", description: "", type: TYPES[0], thumbnail: "", location: "", date: "" });
@@ -24,7 +25,7 @@ export default function EventForm({ initial, onSubmit, label }) {
       <input className="input w-full" placeholder="Thumbnail image URL" value={f.thumbnail} onChange={set("thumbnail")} />
       <input className="input w-full" placeholder="Location, e.g. Mirpur 10, Dhaka" value={f.location} onChange={set("location")} />
       <input type="date" min={tomorrow} className="input w-full" value={f.date} onChange={set("date")} />
-      <button className="btn btn-primary" disabled={busy}>{busy ? <span className="loading loading-spinner" /> : label}</button>
+      <Btn disabled={busy}>{busy ? <span className="loading loading-spinner" /> : label}</Btn>
     </form>
   );
 }

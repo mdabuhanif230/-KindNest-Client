@@ -7,7 +7,36 @@ import EventCard from "@/components/EventCard";
 import EventGrid from "@/components/EventGrid";
 export default function Joined() {
   const [list, setList] = useState(null);
-  useEffect(() => { api("/joined", { auth: true }).then(setList).catch((e) => { toast.error(e.message); setList([]); }); }, []);
+  const [error, setError] = useState("");
+
+  const load = async () => {
+    setList(null);
+    setError("");
+    try {
+      setList(await api("/joined", { auth: true }));
+    } catch (e) {
+      setError(e.message);
+      toast.error(e.message);
+    }
+  };
+
+  useEffect(() => {
+    let active = true;
+    api("/joined", { auth: true })
+      .then((events) => { if (active) setList(events); })
+      .catch((e) => {
+        if (active) {
+          setError(e.message);
+          toast.error(e.message);
+        }
+      });
+    return () => { active = false; };
+  }, []);
+
   return <Guard><div className="max-w-6xl mx-auto px-4 py-10"><h1 className="sec-title">Events you joined</h1>
-    <EventGrid list={list} render={(ev) => <EventCard key={ev._id} ev={ev} />} /></div></Guard>;
+    {error ? <div role="alert" className="paper p-6 mt-6 text-center">
+      <p>{error}</p>
+      <button type="button" className="btn btn-primary mt-4" onClick={load}>Try again</button>
+    </div> : <EventGrid list={list} render={(ev) => <EventCard key={ev._id} ev={ev} />} />}
+  </div></Guard>;
 }

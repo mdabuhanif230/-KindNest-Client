@@ -17,16 +17,28 @@ export default function Register() {
   const submit = async (e) => {
     e.preventDefault();
     if (!f.name.trim()) return toast.error("Enter your name.");
-    if (!/^\S+@\S+\.\S+$/.test(f.email)) return toast.error("Enter a valid email address.");
+    const email = f.email.trim();
+    if (!/^\S+@\S+\.\S+$/.test(email)) return toast.error("Enter a valid email address.");
     if (f.image && !/^https?:\/\//.test(f.image)) return toast.error("Photo URL must start with http or https.");
     if (!/[A-Z]/.test(f.password)) return toast.error("Password needs an uppercase letter.");
     if (!/[a-z]/.test(f.password)) return toast.error("Password needs a lowercase letter.");
     if (f.password.length < 6) return toast.error("Password needs at least 6 characters.");
     setBusy(true);
-    const { error } = await authClient.signUp.email({ name: f.name, email: f.email, password: f.password, image: f.image || undefined });
-    setBusy(false);
-    if (error) return toast.error(error.message || "Could not create your account.");
-    toast.success("Account created. Welcome to KindNest!"); router.push("/");
+    try {
+      const { error } = await authClient.signUp.email({
+        name: f.name.trim(),
+        email,
+        password: f.password,
+        image: f.image.trim() || undefined,
+      });
+      if (error) return toast.error(error.message || "Could not create your account.");
+      toast.success("Account created. Welcome to KindNest!");
+      router.push("/");
+    } catch (error) {
+      toast.error(error.message || "Could not create your account.");
+    } finally {
+      setBusy(false);
+    }
   };
   return (
     <div className="max-w-md mx-auto px-4 py-12">
@@ -35,10 +47,10 @@ export default function Register() {
         <h1 className="sec-title">Create your account</h1>
         <p className="hand text-lg opacity-70 mt-0.5 mb-5">Pull up a chair — you belong here.</p>
         <form onSubmit={submit} className="grid gap-3">
-          <input className="input w-full" placeholder="Full name" value={f.name} onChange={set("name")} />
-          <input className="input w-full" placeholder="Email" value={f.email} onChange={set("email")} />
-          <input className="input w-full" placeholder="Photo URL" value={f.image} onChange={set("image")} />
-          <input type="password" className="input w-full" placeholder="Password" value={f.password} onChange={set("password")} />
+          <input autoComplete="name" className="input w-full" placeholder="Full name" value={f.name} onChange={set("name")} />
+          <input type="email" autoComplete="email" className="input w-full" placeholder="Email" value={f.email} onChange={set("email")} />
+          <input type="url" autoComplete="url" className="input w-full" placeholder="Photo URL" value={f.image} onChange={set("image")} />
+          <input type="password" autoComplete="new-password" className="input w-full" placeholder="Password" value={f.password} onChange={set("password")} />
           <Btn disabled={busy}>{busy ? <span className="loading loading-spinner" /> : "Create account"}</Btn>
         </form>
         {google && <Btn variant="dark" className="w-full mt-3" onClick={withGoogle}>Sign up with Google</Btn>}
